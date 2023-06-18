@@ -16,13 +16,25 @@ namespace banksss
 
         }
 
-        public void DepositMoney(int i,int deposit,Bank bank)
+        public void DepositMoney(Person person,int deposit,Bank bank)
         {
-            bank.Persons[i].value += deposit;
+            person.value += deposit;
+            Console.WriteLine("UPDATED BALANCE - £{0}", person.value);
         }
-        public void WithdrawMoney(int i, int withdraw, Bank bank)
+        public void WithdrawMoney(Person person, int withdraw, Bank bank)
         {
-            bank.Persons[i].value -= withdraw;
+            if (withdraw >= 1)
+            {
+                if (person.value <= 0)
+                {
+                    Console.WriteLine("You can't withdraw any cash right now beacuse you're broke!");
+                }
+            }
+            else
+            {
+                person.value -= withdraw;
+                Console.WriteLine("UPDATED BALANCE - £{0}", person.value);
+            }
         }
     }
 }

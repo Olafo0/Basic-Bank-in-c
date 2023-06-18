@@ -21,26 +21,23 @@ namespace banksss
             return choice;
         }
 
-        static void InsertMoney(int i,Bank bank)
+        static void InsertMoney(Person person,Bank bank)
         {
-            Console.WriteLine(i);
+            Console.WriteLine(person.id);
             //Console.WriteLine(bank.Persons[0]);
-            Console.WriteLine(" CURRENT BALANCE - £{0}", bank.Persons[i].value);
+            Console.WriteLine(" CURRENT BALANCE - £{0}", person.value);
             Console.WriteLine("Please enter the sum you want to Deposit:");
             int deposit = Convert.ToInt32(Console.ReadLine());
-            bank.DepositMoney(i,deposit,bank);
-            Console.WriteLine("UPDATED BALANCE - £{0}", bank.Persons[i].value);
+            bank.DepositMoney(person,deposit,bank);
         }
 
-        static void GetOutMoney(int i, Bank bank)
+        static void GetOutMoney(Person person, Bank bank)
         {
-            Console.WriteLine(i);
             //Console.WriteLine(bank.Persons[0]);
-            Console.WriteLine(" CURRENT BALANCE - £{0}", bank.Persons[i].value);
+            Console.WriteLine(" CURRENT BALANCE - £{0}", person.value);
             Console.WriteLine("Please enter the sum you want to Withdraw:");
             int withdraw = Convert.ToInt32(Console.ReadLine());
-            bank.WithdrawMoney(i, withdraw, bank);
-            Console.WriteLine("UPDATED BALANCE - £{0}", bank.Persons[i].value);
+            bank.WithdrawMoney(person, withdraw, bank);
         }
 
 
@@ -70,8 +67,6 @@ namespace banksss
                     Console.WriteLine("Your ID is:" + "" + id);
                     bank.createAccount(name, age, value, id);
 
-
-
                 }
                 // Depot money
                 else if (x == 2)
@@ -79,20 +74,20 @@ namespace banksss
                     Console.WriteLine("Please enter your ID to login");
                     int user_id = Convert.ToInt32(Console.ReadLine());
 
-                    for (int i = 0; i < bank.Persons.Count; i++)
+                    try
                     {
-                        if (user_id == bank.Persons[i].id)
-                        {
-                            Console.WriteLine("LOGGED IN");
-                            InsertMoney(i,bank);
-
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine(user_id + "VS" + bank.Persons[i].id);
-                        }
+                        // Linq method filtering
+                        var person = bank.Persons.Where(s => s.id == user_id).Single();
+                        Console.WriteLine(person);
+                        Console.WriteLine("LOGGED IN");
+                        InsertMoney(person, bank);
                     }
+                    catch(System.InvalidOperationException)
+                    {
+                        Console.WriteLine("ERROR: Can't find ID!");
+                    }
+                     
+        
                 }
                 // Withdraw
                 else if (x == 3)
@@ -100,22 +95,23 @@ namespace banksss
                     Console.WriteLine("Please enter your ID to login");
                     int user_id = Convert.ToInt32(Console.ReadLine());
 
-                    for (int i = 0; i < bank.Persons.Count; i++)
+                    try
                     {
-                        if (user_id == bank.Persons[i].id)
-                        {
-                            Console.WriteLine("LOGGED IN");
-                            GetOutMoney(i, bank);
+                        // Linq method filtering
 
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine(user_id + "VS" + bank.Persons[i].id);
-                        }
+                        var person = bank.Persons.Where(s => s.id == user_id).Single();
+                        Console.WriteLine(person);
+                        Console.WriteLine("LOGGED IN");
+                        GetOutMoney(person, bank);
+
                     }
+                    catch (System.InvalidOperationException)
+                    {
+                        Console.WriteLine("ERROR: Can't find ID!");
 
+                    }
                 }
+
 
             }
         }
